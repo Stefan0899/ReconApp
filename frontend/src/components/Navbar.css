@@ -1,33 +1,33 @@
 /* Individual Button Colors */
-.account-btn { background-color: #FFB000; color: black; } /* Yellow */
-.invoices-btn { background-color: #525252; color: white; } /* Dark */
-.payment-btn { background-color: #005CFF; color: black; } /* Blue */
+.account-btn { background-color: #FFB000 !important; color: black !important} /* Yellow */
+.invoices-btn { background-color: #525252 !important; color: white !important} /* Dark */
+.payment-btn { background-color: #005CFF !important; color: black !important} /* Blue */
 
 /* Ensure buttons are evenly spaced with less gap */
 .button-container {
     display: flex;
-    justify-content: center; /* Center align buttons */
+    justify-content: center !important; /* Center align buttons */
     flex-wrap: wrap; /* Allows wrapping if needed */
     gap: 10px; /* Reduce spacing between buttons */
-    margin-top: 10px;
-    padding: 5px;
+    margin-top: 10px !important;
+    padding: 5px !important;
     width: 100%; /* Ensures full width */
 }
 
 /* Ensure all buttons have the same size */
 .custom-button-1 {
-    width: 200px; /* Slightly smaller width */
-    height: 60px; /* Slightly smaller height */
-    font-size: 20px;
-    font-weight: 550; /* Remove bold text */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px; /* Rounded corners */
-    border: none;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    text-align: center;
-    text-decoration: none; /* Remove underline from Link */
+    width: 200px !important; /* Slightly smaller width */
+    height: 60px !important; /* Slightly smaller height */
+    font-size: 20px !important;
+    font-weight: 550 !important; /* Remove bold text */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important; /* Rounded corners */
+    border: none !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    text-align: center !important;
+    text-decoration: none !important; /* Remove underline from Link */
 }
 
 /* Button Hover Effect */
