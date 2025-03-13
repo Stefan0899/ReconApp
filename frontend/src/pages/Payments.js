@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Payments.css";
+const API_URL = process.env.REACT_APP_API_BASE_URL;
+
 
 async function fetchUserBill(userAddress) {
   try {
-    const response = await fetch("http://localhost:5000/viewAllUserData", {
+    const response = await fetch(`${API_URL}/viewAllUserData`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userAddress }),
@@ -24,7 +26,7 @@ async function fetchUserBill(userAddress) {
 
 async function payEnergyFees(userAddress, privateKey) {
   try {
-    const response = await fetch("http://localhost:5000/payEnergyFees", {
+    const response = await fetch(`${API_URL}/payEnergyFees`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userAddress, privateKey }),

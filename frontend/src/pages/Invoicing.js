@@ -2,11 +2,13 @@ import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css"; // ✅ Import Bootstrap
 import "./Invoicing.css";
 import { useEffect } from "react"; // ✅ Add `useEffect`
+const API_URL = process.env.REACT_APP_API_BASE_URL;
+
 
 
 async function fetchUserData(userAddress) {
   try {
-    const response = await fetch("http://localhost:5000/viewAllUserData", {
+    const response = await fetch(`${API_URL}/viewAllUserData`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userAddress }),
@@ -167,7 +169,7 @@ const Invoicing = ({ walletAddress }) => {
     setInvoiceStatus("");
     
     try {
-        const response = await fetch("http://localhost:5000/runBilling", {
+        const response = await fetch(`${API_URL}/runBilling`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ userAddress: walletAddress }),

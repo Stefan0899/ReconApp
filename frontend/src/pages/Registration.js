@@ -2,12 +2,13 @@ import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css"; // ✅ Bootstrap for styling
 import { useEffect } from "react"; // ✅ Add `useEffect`
 import "./registration.css";
+const API_URL = process.env.REACT_APP_API_BASE_URL;
 
 
 
 async function fetchUserData(userAddress) {
   try {
-    const response = await fetch("http://localhost:5000/viewAllUserData", {
+    const response = await fetch(`${API_URL}/viewAllUserData`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userAddress }),
@@ -26,7 +27,7 @@ async function fetchUserData(userAddress) {
 
 async function fetchUserMappings(userAddress) {
   try {
-    const response = await fetch("http://localhost:5000/getUserMappings", {
+    const response = await fetch(`${API_URL}/getUserMappings`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userAddress }),
@@ -47,7 +48,7 @@ async function fetchUserMappings(userAddress) {
 // ✅ Register User Function
 async function registerUser(userAddress) {
   try {
-    const response = await fetch("http://localhost:5000/register", {
+    const response = await fetch(`${API_URL}register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userAddress }),
@@ -63,7 +64,7 @@ async function registerUser(userAddress) {
 
 async function requestTokenTransfer(userAddress) {
   try {
-    const response = await fetch("http://localhost:5000/transferTokens", {
+    const response = await fetch(`${API_URL}/transferTokens`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userAddress }),
@@ -305,7 +306,7 @@ function Registration({ walletAddress }) {
     setLoadingBalances(true);
   
     try {
-      const response = await fetch("http://localhost:5000/getTokenBalance", {
+      const response = await fetch(`${API_URL}/getTokenBalance`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userAddress: walletAddress }),
@@ -335,7 +336,7 @@ function Registration({ walletAddress }) {
   
     try {
       console.log("🔄 Requesting Sepolia ETH transfer...");
-      const response = await fetch("http://localhost:5000/transferSepEth", {
+      const response = await fetch(`${API_URL}/transferSepEth`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userAddress: walletAddress }), // Fixed 0.2 ETH transfer
