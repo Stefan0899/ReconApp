@@ -1,0 +1,76 @@
+  /* Individual Button Colors */
+  .guide-btn { background-color: #FFB000; color: black; } /* Teal */
+  .register-btn { background-color: #FFB000; color: black; } /* Green */
+  .service-btn { background-color: #1A1A1A; color: white; } /* Blue */
+  .tariff-btn { background-color: #1A1A1A; color: white; } /* Purple */
+  .balance-btn { background-color: #1A1A1A; color: white; } /* Orange */
+  .buy-eth-btn { background-color: #005CFF; color: black; } /* Teal */
+  .tokens-btn { background-color: #005CFF; color: black; } /* Pink */
+  
+
+    /* Ensure buttons are evenly spaced with less gap */
+    .button-container {
+    display: flex;
+    justify-content: center; /* Center align buttons */
+    flex-wrap: wrap; /* Allows wrapping if needed */
+    gap: 10px; /* Reduce spacing between buttons */
+    margin-top: 10px;
+    padding: 5px;
+    width: 100%; /* Ensures full width */
+  }
+  
+  
+  /* Ensure all buttons have the same size */
+/* Ensure all buttons have the same size */
+    .custom-button {
+    width: 180px; /* Slightly smaller width */
+    height: 45px; /* Slightly smaller height */
+    font-size: 16px;
+    font-weight: 550; /* Remove bold text */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px; /* Rounded corners */
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-align: center;
+  }
+  
+  
+  /* Button Hover Effect */
+  .custom-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  }
+/* Ensure correct colors for section headers */
+.section-header-200 {
+    font-size: 30px !important; 
+    font-weight: 550 !important;
+    padding: 12px 0 !important;
+    color: #FFB000 !important; /* Forces color */
+    text-align: center !important;
+}
+
+  .section-header-2{
+    font-size: 30px;
+    font-weight: 550;
+    padding: 12px 0;
+    color: #1A1A1A !important;
+    text-align: center;
+  }
+
+  .section-header-3{
+    font-size: 30px;
+    font-weight: 550;
+    padding: 12px 0;
+    color: #005CFF !important;
+    text-align: center;
+  }
+  
+  /* Hide sections initially */
+  .hidden {
+    display: none;
+  }
+  
+  
+  

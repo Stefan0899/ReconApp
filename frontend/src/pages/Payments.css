@@ -1,0 +1,45 @@
+  
+  /* Ensure all buttons have the same size */
+  /* Ensure all buttons have the same size */
+  .custom-button {
+    width: 180px; /* Slightly smaller width */
+    height: 45px; /* Slightly smaller height */
+    font-size: 16px;
+    font-weight: 550; /* Remove bold text */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px; /* Rounded corners */
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-align: center;
+  }
+
+
+  /* Button Hover Effect */
+  .custom-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .pay-btn { background-color: #FFB000; color: black; } /* Pink */
+    
+    /* Ensure buttons are evenly spaced with less gap */
+    .button-container {
+      display: flex;
+      flex-direction: column; /* Stack buttons vertically */
+      align-items: center; /* Center buttons */
+      gap: 15px; /* Space between buttons */
+      margin-top: 10px;
+      padding: 5px;
+      width: 100%;
+    }
+  
+    /* Ensure correct color for all section headers */
+    .section-header {
+        font-size: 30px;
+        font-weight: 550;
+        padding: 12px 0;
+        color: #005CFF !important; /* Ensures blue color */
+        text-align: center;
+    }

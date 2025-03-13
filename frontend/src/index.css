@@ -1,0 +1,17 @@
+body {
+  background-color: #1a1a1a; /* Dark background */
+  color: #f0c040; /* Yellowish text */
+  font-family: 'Arial', sans-serif;
+}
+
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.logo {
+  width: 180px;  /* Adjust as needed */
+  height: auto; /* Keeps the aspect ratio */
+}
+

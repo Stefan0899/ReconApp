@@ -1,0 +1,148 @@
+  .table-container {
+    max-width: 800px;
+    max-height: fit-content;
+    margin: auto;
+  }
+
+  /* Ensure table takes full width of container */
+  .table-container table {
+    width: 100%;
+    table-layout: fixed; /* Ensures column widths are consistent */
+  }
+
+  /* Define column widths */
+  .table-container th:nth-child(1), 
+  .table-container td:nth-child(1) {
+    width: 35%; /* Adjust first column width */
+  }
+
+  .table-container th:nth-child(2), 
+  .table-container td:nth-child(2),
+  .table-container th:nth-child(3), 
+  .table-container td:nth-child(3),
+  .table-container th:nth-child(4), 
+  .table-container td:nth-child(4) {
+    width: 21.6%; /* Equal width for remaining columns */
+  }
+
+  /* Reduce row height (depth) */
+  .table-container th, 
+  .table-container td {
+    padding: 6px 10px; /* Adjust for smaller row depth */
+  }
+
+  /* Left-align all columns except the first */
+  .table-container td:not(:first-child), 
+  .table-container th:not(:first-child) {
+    text-align: right;
+  }
+
+  /* Format last column: 'R' aligned left, value aligned right */
+  .table-container tbody tr td:last-child {
+    text-align: right; /* Right-align the values */
+    position: relative;
+    padding-left: 20px; /* Space for 'R' */
+  }
+
+  /* 'R' should be on the left side */
+  .table-container tbody tr td:last-child::before {
+    content: "R ";
+    position: absolute;
+    left: 5px; /* Position 'R' to the left */
+  }
+
+  .table-container-1 {
+    max-width: 800px;
+    max-height: fit-content;
+    margin: auto;
+  }
+
+  /* Ensure table takes full width of container */
+  .table-container-1 table {
+    width: 100%;
+    table-layout: fixed; /* Ensures column widths are consistent */
+  }
+
+  /* Define column widths */
+  .table-container-1 th:nth-child(1), 
+  .table-container-1 td:nth-child(1) {
+    width: 35%; /* Adjust first column width */
+  }
+
+  .table-container-1 th:nth-child(2), 
+  .table-container-1 td:nth-child(2),
+  .table-container-1 th:nth-child(3), 
+  .table-container-1 td:nth-child(3),
+  .table-container-1 th:nth-child(4), 
+  .table-container-1 td:nth-child(4) {
+    width: 21.6%; /* Adjust so it sums to 100% */
+  }
+
+
+  /* Reduce row height (depth) */
+  .table-container-1 th, 
+  .table-container-1 td {
+    padding: 6px 10px; /* Adjust for smaller row depth */
+  }
+
+  /* Left-align all columns except the first */
+  .table-container-1 td:not(:first-child), 
+  .table-container-1 th:not(:first-child) {
+    text-align: right;
+  }
+
+  /* Format last column: 'R' aligned left, value aligned right */
+  .table-container-1 tbody tr td:last-child {
+    text-align: right; /* Right-align the values */
+    position: relative;
+    padding-left: 20px; /* Space for 'R' */
+  }
+
+
+  
+  
+  /* Ensure all buttons have the same size */
+  /* Ensure all buttons have the same size */
+  .custom-button {
+    width: 180px; /* Slightly smaller width */
+    height: 45px; /* Slightly smaller height */
+    font-size: 16px;
+    font-weight: 550; /* Remove bold text */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px; /* Rounded corners */
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-align: center;
+  }
+
+
+  /* Button Hover Effect */
+  .custom-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .runbill-btn { background-color: #FFB000; color: black; } /* Pink */
+  .getinv-btn { background-color: #1A1A1A; color: white; } /* Pink */
+    
+    /* Ensure buttons are evenly spaced with less gap */
+    .button-container {
+      display: flex;
+      flex-direction: column; /* Stack buttons vertically */
+      align-items: center; /* Center buttons */
+      gap: 15px; /* Space between buttons */
+      margin-top: 10px;
+      padding: 5px;
+      width: 100%;
+    }
+  
+    .section-header-12{
+      font-size: 30px !important;
+      font-weight: 550 !important;
+      padding: 12px 0 !important;
+      color: #1A1A1A !important;
+      text-align: center !important;
+    }
+

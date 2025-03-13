@@ -1,0 +1,42 @@
+/* Individual Button Colors */
+.account-btn { background-color: #FFB000; color: black; } /* Yellow */
+.invoices-btn { background-color: #525252; color: white; } /* Dark */
+.payment-btn { background-color: #005CFF; color: black; } /* Blue */
+
+/* Ensure buttons are evenly spaced with less gap */
+.button-container {
+    display: flex;
+    justify-content: center; /* Center align buttons */
+    flex-wrap: wrap; /* Allows wrapping if needed */
+    gap: 10px; /* Reduce spacing between buttons */
+    margin-top: 10px;
+    padding: 5px;
+    width: 100%; /* Ensures full width */
+}
+
+/* Ensure all buttons have the same size */
+.custom-button-1 {
+    width: 200px; /* Slightly smaller width */
+    height: 60px; /* Slightly smaller height */
+    font-size: 20px;
+    font-weight: 550; /* Remove bold text */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px; /* Rounded corners */
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-align: center;
+    text-decoration: none; /* Remove underline from Link */
+}
+
+/* Button Hover Effect */
+.custom-button-1:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Hide sections initially */
+.hidden {
+    display: none;
+}
