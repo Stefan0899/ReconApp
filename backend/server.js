@@ -15,6 +15,21 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Allow CORS for all origins (or specify frontend domain)
+app.use(cors({ origin: "https://energyreconapp.onrender.com" }));
+
+// If you want to allow multiple domains:
+const allowedOrigins = ["https://energyreconapp.onrender.com", "http://localhost:3000"];
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  }
+}));
+
 // ✅ User Registration Route
 app.post("/register", async (req, res) => {
   const { userAddress } = req.body;
