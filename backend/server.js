@@ -91,23 +91,6 @@ app.post("/transferTokens", async (req, res) => {
     }
 });
 
-// ✅ Pay Energy Fees Route
-app.post("/payEnergyFees", async (req, res) => {
-    const { userAddress, privateKey } = req.body;
-
-    if (!userAddress || !privateKey) {
-        return res.status(400).json({ error: "Missing user address or private key." });
-    }
-
-    try {
-        const result = await payEnergyFees(userAddress, privateKey);
-        res.json(result);
-    } catch (error) {
-        console.error("❌ Error processing payment:", error.message);
-        res.status(500).json({ error: "Failed to process payment." });
-    }
-});
-
 // ✅ Get TokenBalance Fees Route
 app.post("/getTokenBalance", async (req, res) => {
   const { userAddress} = req.body;

@@ -88,12 +88,13 @@ function Registration({ walletAddress }) {
   const [loading, setLoading] = useState(false);
   const [registering, setRegistering] = useState(false);
   const [serviceProviders, setServiceProviders] = useState(null);
+  const [showTokenTransfer, setShowTokenTransfer] = useState(false); // ✅ Track Token Transfer Table Visibility
+  const [showSepoliaTransfer, setShowSepoliaTransfer] = useState(false);
   const [loadingProviders, setLoadingProviders] = useState(false);
   const [loadingTariffs, setLoadingTariffs] = useState(false);
   const [loadingBalance, setLoadingBalances] = useState(false);
   const [loadingTokenBuy, setLoadingTokenBuy] = useState(false);
   const [loadingETHBuy, setLoadingETHBuy] = useState(false);
-
   const [transferStatus, setTransferStatus] = useState(""); // ✅ Track transfer status
   const [transferData, setTransferData] = useState(null); // ✅ Store token transfer results
   const [tokenBalances, setTokenBalances] = useState(null);
@@ -270,28 +271,33 @@ function Registration({ walletAddress }) {
   
   const handleTransfer = async () => {
     if (!walletAddress) {
-      alert("Please connect your wallet first!");
-      return;
+        alert("Please connect your wallet first!");
+        return;
     }
+
     resetOutputs(); // ✅ Clear previous outputs
     setLoadingTokenBuy(true);
     setTransferStatus("⏳ Transferring tokens...");
+    
+    // ✅ Ensure only the token transfer table is shown
+    setShowTokenTransfer(true);
+    setShowSepoliaTransfer(false); // Hide Sepolia ETH Table
 
     try {
-      console.log("🔄 Requesting token transfer...");
-      const data = await requestTokenTransfer(walletAddress);
+        console.log("🔄 Requesting token transfer...");
+        const data = await requestTokenTransfer(walletAddress);
 
-      if (data) {
-        console.log("✅ Token transfer completed:", data);
-        setTransferData(data);
-        setTransferStatus("✅ Token transfer successful!");
-      } else {
-        console.error("❌ API request failed.");
-        setTransferStatus("❌ Token transfer failed.");
-      }
+        if (data) {
+            console.log("✅ Token transfer completed:", data);
+            setTransferData(data);
+            setTransferStatus("✅ Token transfer successful!");
+        } else {
+            console.error("❌ API request failed.");
+            setTransferStatus("❌ Token transfer failed.");
+        }
     } catch (error) {
-      console.error("❌ Error transferring tokens:", error);
-      setTransferStatus("❌ Error during transfer.");
+        console.error("❌ Error transferring tokens:", error);
+        setTransferStatus("❌ Error during transfer.");
     }
 
     setLoadingTokenBuy(false);
@@ -324,45 +330,51 @@ function Registration({ walletAddress }) {
     setLoadingBalances(false);
   };
 
-  async function handleBuySepoliaETH() {
+  const handleBuySepoliaETH = async () => {
     if (!walletAddress) {
-      alert("Please connect your wallet first!");
-      return;
+        alert("Please connect your wallet first!");
+        return;
     }
+
     resetOutputs(); // ✅ Clear previous outputs
     setLoadingETHBuy(true);
     setTransferStatus("⏳ Purchasing Sepolia ETH...");
     setDisableBuySepETH(true); // ✅ Disable button after clicking
-  
+
+    // ✅ Ensure only the Sepolia ETH table is shown
+    setShowSepoliaTransfer(true);
+    setShowTokenTransfer(false); // Hide Token Transfer Table
+
     try {
-      console.log("🔄 Requesting Sepolia ETH transfer...");
-      const response = await fetch(`${API_URL}/transferSepEth`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userAddress: walletAddress }), // Fixed 0.2 ETH transfer
-      });
-  
-      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-  
-      const data = await response.json();
-      console.log("✅ Sepolia ETH purchase successful:", data);
-  
-      setTransferData(data);
-      setTransferStatus("✅ Sepolia ETH purchased successfully!");
-  
-      // ✅ Re-enable the button after 30 seconds
-      setTimeout(() => {
-        setDisableBuySepETH(false);
-      }, 5000);
-  
+        console.log("🔄 Requesting Sepolia ETH transfer...");
+        const response = await fetch(`${API_URL}/transferSepEth`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userAddress: walletAddress }),
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+        const data = await response.json();
+        console.log("✅ Sepolia ETH purchase successful:", data);
+
+        setTransferData(data);
+        setTransferStatus("✅ Sepolia ETH purchased successfully!");
+
+        // ✅ Re-enable the button after 5 seconds
+        setTimeout(() => {
+            setDisableBuySepETH(false);
+        }, 5000);
+
     } catch (error) {
-      console.error("❌ Error purchasing Sepolia ETH:", error);
-      setTransferStatus("❌ Sepolia ETH purchase failed.");
-      setDisableBuySepETH(false); // ✅ Re-enable button if the request fails
+        console.error("❌ Error purchasing Sepolia ETH:", error);
+        setTransferStatus("❌ Sepolia ETH purchase failed.");
+        setDisableBuySepETH(false); // ✅ Re-enable button if request fails
     }
-  
+
     setLoadingETHBuy(false);
   };
+
 
 
   return (
@@ -562,27 +574,27 @@ function Registration({ walletAddress }) {
         </div>
 
         {/* Show Token Balances Table */}
-        {tokenBalances && (
-              <div className="table-container mt-8">
+        {walletAddress && tokenBalances && (
+              <div className="table-container-2 mt-8">
                 <div className="table-responsive">
                   <table className="table table-bordered table-hover">
                     <thead className="table-dark">
                       <tr>
-                        <th>Token Type</th>
+                        <th>Token</th>
                         <th>Balance</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td>Ep Tokens</td>
+                        <td>Peak</td>
                         <td>{tokenBalances.EpTokens}</td>
                       </tr>
                       <tr>
-                        <td>Es Tokens</td>
+                        <td>Standard</td>
                         <td>{tokenBalances.EsTokens}</td>
                       </tr>
                       <tr>
-                        <td>Eo Tokens</td>
+                        <td>Offpeak</td>
                         <td>{tokenBalances.EoTokens}</td>
                       </tr>
                     </tbody>
@@ -605,49 +617,53 @@ function Registration({ walletAddress }) {
               disabled={loadingTokenBuy}
               className="custom-button tokens-btn"
             >
-              {loading ? "Processing..." : "Buy Energy Tokens"}
+              {loadingTokenBuy  ? "Processing..." : "Get Energy Tokens"}
             </button>
         )}
         </div>
 
         {/* ✅ Show Transfer Results Only if Data Exists */}
-        {transferData && (
+        {showTokenTransfer && transferData && (
           <div className="mt-4">
-            <h3 className="text-center text-success">✅ Successful Transfer</h3>
+            <h3 className="text-center text-success">✅ Successful Token Transfer</h3>
             <div className="table-responsive">
               <table className="table table-bordered table-hover">
                 <thead className="table-dark">
                   <tr>
                     <th>Token</th>
                     <th>Amount</th>
-                    <th>Transaction Detail</th>
+                    <th>Transaction Hash</th>
+                    <th>Explore Transaction</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>Peak Energy (Ep)</td>
                     <td>{transferData.PeakTokens}</td>
+                    <td>{transferData.EpTxHash}</td>
                     <td>
                       <a href={`https://sepolia.etherscan.io/tx/${transferData.EpTxHash}`} target="_blank" rel="noopener noreferrer">
-                        View on Etherscan
+                      Explore on Etherscan
                       </a>
                     </td>
                   </tr>
                   <tr>
                     <td>Standard Energy (Es)</td>
                     <td>{transferData.StdTokens}</td>
+                    <td>{transferData.EsTxHash}</td>
                     <td>
                       <a href={`https://sepolia.etherscan.io/tx/${transferData.EsTxHash}`} target="_blank" rel="noopener noreferrer">
-                        View on Etherscan
+                      Explore on Etherscan
                       </a>
                     </td>
                   </tr>
                   <tr>
                     <td>Off-Peak Energy (Eo)</td>
                     <td>{transferData.OffTokens}</td>
+                    <td>{transferData.EoTxHash}</td>
                     <td>
                       <a href={`https://sepolia.etherscan.io/tx/${transferData.EoTxHash}`} target="_blank" rel="noopener noreferrer">
-                        View on Etherscan
+                      Explore on Etherscan
                       </a>
                     </td>
                   </tr>
@@ -665,33 +681,31 @@ function Registration({ walletAddress }) {
               disabled={loadingETHBuy || disableBuySepETH} // ✅ Disable after purchase
               className="custom-button buy-eth-btn"
             >
-              {loading ? "Processing..." : disableBuySepETH ? "⏳ Wait 5..." : "Tranfer Sepolia ETH"}
+              {loadingETHBuy  ? "Processing..." : disableBuySepETH ? "⏳ Wait 5..." : "Get Sepolia ETH"}
             </button>
         )}
         </div>
 
         {/* ✅ Show Sepolia ETH Transaction Result */}
-        {transferData && (
+        {showSepoliaTransfer && transferData && (
           <div className="mt-4">
-            <h3 className="text-center text-success">✅ Sepolia ETH Purchase Successful</h3>
+            <h3 className="text-center text-success">✅ Sepolia ETH Transfer Successful</h3>
             <div className="table-responsive">
               <table className="table table-bordered table-hover">
                 <thead className="table-dark">
                   <tr>
-                    <th>From</th>
-                    <th>To</th>
                     <th>Amount (ETH)</th>
                     <th>Transaction Hash</th>
+                    <th>Explore Transaction</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>{transferData.from}</td>
-                    <td>{transferData.to}</td>
                     <td>{transferData.amount}</td>
+                    <td>{transferData.transactionHash}</td>
                     <td>
                       <a href={`https://sepolia.etherscan.io/tx/${transferData.transactionHash}`} target="_blank" rel="noopener noreferrer">
-                        View on Etherscan
+                        Explore on Etherscan
                       </a>
                     </td>
                   </tr>

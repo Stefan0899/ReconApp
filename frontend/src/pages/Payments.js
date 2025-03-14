@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Payments.css";
+import { ethers } from "ethers";
 const API_URL = process.env.REACT_APP_API_BASE_URL;
 
 
@@ -24,28 +25,8 @@ async function fetchUserBill(userAddress) {
   }
 }
 
-async function payEnergyFees(userAddress, privateKey) {
-  try {
-    const response = await fetch(`${API_URL}/payEnergyFees`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userAddress, privateKey }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("❌ Error processing payment:", error);
-    return null;
-  }
-}
-
 function Payment({ walletAddress }) {
   const [totalBill, setTotalBill] = useState(null);
-  const [privateKey, setPrivateKey] = useState("");
   const [paymentStatus, setPaymentStatus] = useState("");
   const [transactionHash, setTransactionHash] = useState("");
   const [paymentAmount, setPaymentAmount] = useState("");
@@ -63,7 +44,6 @@ function Payment({ walletAddress }) {
     } else {
       // Reset when wallet disconnects
       setTotalBill(null);
-      setPrivateKey("");
       setPaymentStatus("");
       setTransactionHash("");
       setPaymentAmount("");
@@ -71,34 +51,70 @@ function Payment({ walletAddress }) {
   }, [walletAddress]);
 
   const handlePayment = async () => {
-    if (!walletAddress || !privateKey) {
-      alert("Please connect your wallet and enter your private key!");
+    if (!window.ethereum) {
+      alert("MetaMask is not installed. Please install it to proceed.");
       return;
     }
-
+  
+    if (!walletAddress) {
+      alert("Please connect your wallet first!");
+      return;
+    }
+  
     setLoading(true);
-    setPaymentStatus("⏳ Processing payment...");
-
+    setPaymentStatus("⏳ Fetching total bill...");
+  
     try {
-      console.log("🔄 Requesting energy fee payment...");
-      const result = await payEnergyFees(walletAddress, privateKey);
+      // ✅ Step 1: Connect to Ethereum via MetaMask
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+  
+      const contract = new ethers.Contract(
+        "0xB16103De3B577C8384157A7B15660bA97469DBA8", // ✅ Replace with your deployed contract address
+        [
+          "function userFees(address user) public view returns (uint256, uint256, uint256, uint256, uint256)",
+          "function payEnergyFees() public payable",
+        ],
+        signer
+      );
+  
+      // ✅ Step 2: Fetch all stored values from userFees[_user]
+      const fees = await contract.userFees(walletAddress);
 
-      if (result && result.success) {
-        console.log("✅ Payment successful:", result);
-        setPaymentStatus("✅ Payment Successful!");
-        setPaymentAmount(result.totalPayment);
-        setTransactionHash(result.transactionHash);
-      } else {
-        console.error("❌ Payment failed.");
-        setPaymentStatus("❌ Payment Failed.");
-      }
+      // ✅ Extract the last value (totalBill)
+      const totalBill = fees[4]; // `totalBill` is the last value in the struct
+      const totalBillInWei = totalBill.toString();
+      const totalBillInEther = ethers.formatEther(totalBillInWei);
+  
+      console.log("💰 Total Bill (ETH):", totalBillInEther);
+  
+      // ✅ Step 3: Send the transaction to the smart contract
+      setPaymentStatus("⏳ Waiting for MetaMask confirmation...");
+  
+      const tx = await contract.payEnergyFees({
+        value: totalBillInWei, // Send exact ETH required
+        gasLimit: "300000", // Ensure enough gas
+      });
+  
+      console.log("✅ Transaction sent:", tx.hash);
+  
+      setPaymentStatus("⏳ Waiting for transaction confirmation...");
+      await tx.wait(); // Wait for confirmation
+  
+      console.log("✅ Payment successful:", tx);
+      setTransactionHash(tx.hash);
+      setPaymentAmount(totalBillInEther);
+  
+      setPaymentStatus("✅ Payment Successful!");
+  
     } catch (error) {
       console.error("❌ Error processing payment:", error);
-      setPaymentStatus("❌ Error during payment.");
+      setPaymentStatus("❌ Payment Failed.");
     }
-
+  
     setLoading(false);
   };
+  
 
   return (
     <div className="container mt-5">
@@ -120,27 +136,16 @@ function Payment({ walletAddress }) {
               </p>
             </div>
 
-            {/* ✅ Pay Energy Fees Section */}
+            {/* ✅ Pay Button */}
             <h3 className="section-header">💳 Settle Energy Bill</h3>
-            <div className="row justify-content-center">
-              <div className="col-md-6">
-                <input
-                  type="password"
-                  className="form-control"
-                  placeholder="Enter Private Key"
-                  value={privateKey}
-                  onChange={(e) => setPrivateKey(e.target.value)}
-                />
-              </div>
-              <div className="col-auto">
-                <button
-                  className="custom-button pay-btn"
-                  onClick={handlePayment}
-                  disabled={loading}
-                >
-                  {loading ? "Processing..." : "Pay"}
-                </button>
-              </div>
+            <div className="button-container">
+              <button
+                className="custom-button pay-btn"
+                onClick={handlePayment}
+                disabled={loading}
+              >
+                {loading ? "Processing..." : "Pay with MetaMask"}
+              </button>
             </div>
 
             {/* ✅ Payment Status */}
@@ -149,19 +154,25 @@ function Payment({ walletAddress }) {
             {/* ✅ Payment Details Table */}
             {transactionHash && paymentAmount && (
               <div className="mt-4">
-                <h3 className="text-center text-success">✅ Payment Details</h3>
+                <h3 className="text-center text-success">Payment Details</h3>
                 <div className="table-responsive">
                   <table className="table table-bordered table-hover">
                     <thead className="table-dark">
                       <tr>
                         <th>Transaction Hash</th>
+                        <th>Explore Transaction</th>
                         <th>Amount Paid (ETH)</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td>{transactionHash}</td>
-                        <td>{paymentAmount}</td>
+                        <td>
+                          <a href={`https://sepolia.etherscan.io/tx/${transactionHash}`} target="_blank" rel="noopener noreferrer">
+                            Explore on Etherscan
+                          </a>
+                        </td>
+                        <td>{Number(paymentAmount).toFixed(4)}</td>
                       </tr>
                     </tbody>
                   </table>
