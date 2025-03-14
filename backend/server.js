@@ -8,7 +8,6 @@ const { getUserMappings } = require("./getUserMappings");
 const { runBilling } = require("./runBilling");
 const { viewAllUserData } = require("./viewAllUserData"); // ✅ Import the separate module
 const { transferTokens } = require("./transferTokens");
-const { payEnergyFees } = require("./payEnergyFees");
 const { fetchEnergyTokenBalances } = require("./getTokenBalance");
 const { sendSepoliaETH } = require("./transferSepEth");
 
