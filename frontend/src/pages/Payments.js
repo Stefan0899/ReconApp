@@ -93,7 +93,7 @@ function Payment({ walletAddress }) {
   
       const tx = await contract.payEnergyFees({
         value: totalBillInWei, // Send exact ETH required
-        gasLimit: "300000", // Ensure enough gas
+        gasLimit: "500000", // Ensure enough gas
       });
   
       console.log("✅ Transaction sent:", tx.hash);
