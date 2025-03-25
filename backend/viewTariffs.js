@@ -2,7 +2,7 @@ require("dotenv").config();
 const { ethers } = require("ethers");
 
 // ✅ Set up connection to Sepolia via Alchemy
-const contractAddress = "0xB16103De3B577C8384157A7B15660bA97469DBA8"; // ✅ Replace with deployed contract address
+const contractAddress = "0x2D4637E69eE8861D04B4ac890241C98bc7Ad8C5f"; // ✅ Replace with deployed contract address
 const provider = new ethers.JsonRpcProvider(`https://eth-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`);
 const providerWallet = new ethers.Wallet(process.env.PROVIDER_PRIVATE_KEY, provider);
 

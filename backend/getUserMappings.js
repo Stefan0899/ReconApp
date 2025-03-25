@@ -4,24 +4,27 @@ const cors = require("cors");
 const { ethers } = require("ethers");
 
 // ✅ Set up connection to Sepolia via Alchemy
-const contractAddress = "0xB16103De3B577C8384157A7B15660bA97469DBA8"; // ✅ Replace with deployed contract address
+const contractAddress = "0x2D4637E69eE8861D04B4ac890241C98bc7Ad8C5f"; // Replace with your deployed contract address
 const provider = new ethers.JsonRpcProvider(`https://eth-sepolia.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`);
 const providerWallet = new ethers.Wallet(process.env.PROVIDER_PRIVATE_KEY, provider);
 
-// ✅ Contract ABI (Ensure these function signatures match your smart contract)
+// ✅ Contract ABI - matching your updated mappings and structure
 const contractABI = [
-  "function distributors(address) public view returns (address)",
-  "function transmittors(address) public view returns (address)",
-  "function generators(address) public view returns (address)",
-  "function providers(address) public view returns (bool)",
-  "function transmittorsRegistered(address) public view returns (bool)",
-  "function generatorsRegistered(address) public view returns (bool)",
+  // Role mappings
+  "function providers(address) public view returns (bool isRegistered)",
+  "function distributors(address) public view returns (bool isRegistered)",
+  "function transmittors(address) public view returns (bool isRegistered)",
+  "function generators(address) public view returns (bool isRegistered)",
+
+  // User -> Role assignments
   "function userProvider(address) public view returns (address)",
-  "function userTariffID(address) public view returns (uint256)",
   "function userDistributor(address) public view returns (address)",
   "function userTransmittor(address) public view returns (address)",
-  "function userTransmittorTariffID(address) public view returns (uint256)",
   "function userGenerator(address) public view returns (address)",
+
+  // Tariff IDs mapped per user for each role
+  "function userDistributorTariffID(address) public view returns (uint256)",
+  "function userTransmittorTariffID(address) public view returns (uint256)",
   "function userGeneratorTariffID(address) public view returns (uint256)"
 ];
 
@@ -41,22 +44,24 @@ async function getUserMappings(userAddress) {
 
     console.log(`Fetching mappings for: ${userAddress}`);
 
-    // ✅ Fetch values from the smart contract
-    const provider = await contract.userProvider(userAddress);
-    const distributor = await contract.userDistributor(userAddress);
-    const tariffID = await contract.userTariffID(userAddress);
-    const transmittor = await contract.userTransmittor(userAddress);
+    // Fetch assigned entities
+    const providerAddr = await contract.userProvider(userAddress);
+    const distributorAddr = await contract.userDistributor(userAddress);
+    const transmittorAddr = await contract.userTransmittor(userAddress);
+    const generatorAddr = await contract.userGenerator(userAddress);
+
+    // Fetch tariff IDs for each assigned entity
+    const distributorTariffID = await contract.userDistributorTariffID(userAddress);
     const transmittorTariffID = await contract.userTransmittorTariffID(userAddress);
-    const generator = await contract.userGenerator(userAddress);
     const generatorTariffID = await contract.userGeneratorTariffID(userAddress);
 
     const result = {
-      provider,
-      distributor,
-      tariffID: Number(tariffID),
-      transmittor,
+      provider: providerAddr,
+      distributor: distributorAddr,
+      distributorTariffID: Number(distributorTariffID),
+      transmittor: transmittorAddr,
       transmittorTariffID: Number(transmittorTariffID),
-      generator,
+      generator: generatorAddr,
       generatorTariffID: Number(generatorTariffID),
     };
 
@@ -69,5 +74,6 @@ async function getUserMappings(userAddress) {
 }
 
 module.exports = { getUserMappings };
+
 
 

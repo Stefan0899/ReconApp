@@ -70,7 +70,7 @@ function Payment({ walletAddress }) {
       const signer = await provider.getSigner();
   
       const contract = new ethers.Contract(
-        "0xB16103De3B577C8384157A7B15660bA97469DBA8", // ✅ Replace with your deployed contract address
+        "0x2D4637E69eE8861D04B4ac890241C98bc7Ad8C5f", // ✅ Replace with your deployed contract address
         [
           "function userFees(address user) public view returns (uint256, uint256, uint256, uint256, uint256)",
           "function payEnergyFees() public payable",
