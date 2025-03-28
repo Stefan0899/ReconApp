@@ -17,66 +17,105 @@ const contractABI = [
     "function assignDistributorToUser(address _user, address _distributor) public",
     "function assignTransmittorToUser(address _user, address _transmittor) public",
     "function assignGeneratorToUser(address _user, address _generator) public",
-    "function assignDistributorTariffToUser(address user, uint256 tariffId) public",
-    "function assignTransmittorTariffToUser(address user, uint256 tariffId) public",
-    "function assignGeneratorTariffToUser(address user, uint256 tariffId) public"
+    "function assignDistributorTariffToUser(address _user, uint256 _tariffId) public",
+    "function assignTransmittorTariffToUser(address _user, uint256 _tariffId) public",
+    "function assignGeneratorTariffToUser(address _user, uint256 _tariffId) public"
 ];
 
 async function registerUser(userAddress) {
-    try {
-        console.log(`🔹 Registering user: ${userAddress}`);
+    console.log(`🔹 Registering user: ${userAddress}`);
 
-        // ✅ Connect to contract with the correct wallet signers
+    try {
         const ownerContract = new ethers.Contract(contractAddress, contractABI, ownerWallet);
         const providerContract = new ethers.Contract(contractAddress, contractABI, providerWallet);
         const distributorContract = new ethers.Contract(contractAddress, contractABI, distributorWallet);
         const transmittorContract = new ethers.Contract(contractAddress, contractABI, transmittorWallet);
         const generatorContract = new ethers.Contract(contractAddress, contractABI, generatorWallet);
 
-        // ✅ Assign Provider
-        console.log(`🔹 Assigning provider: ${providerWallet.address}`);
-        let tx = await ownerContract.assignProviderToUser(userAddress, providerWallet.address);
-        await tx.wait();
-        console.log(`✅ Provider assigned: ${providerWallet.address}`);
+        // Assign Provider
+        try {
+            console.log(`🔹 Assigning provider: ${providerWallet.address}`);
+            let tx = await ownerContract.assignProviderToUser(userAddress, providerWallet.address);
+            await tx.wait();
+            console.log(`✅ Provider assigned`);
+        } catch (err) {
+            throw new Error(`Provider assignment failed: ${err.reason || err.message}`);
+        }
 
-        // ✅ Assign Distributor
-        console.log(`🔹 Assigning distributor: ${distributorWallet.address}`);
-        tx = await ownerContract.assignDistributorToUser(userAddress, distributorWallet.address);
-        await tx.wait();
-        console.log(`✅ Distributor assigned: ${distributorWallet.address}`);
+        // Assign Distributor
+        try {
+            console.log(`🔹 Assigning distributor: ${distributorWallet.address}`);
+            let tx = await ownerContract.assignDistributorToUser(userAddress, distributorWallet.address);
+            await tx.wait();
+            console.log(`✅ Distributor assigned`);
+        } catch (err) {
+            throw new Error(`Distributor assignment failed: ${err.reason || err.message}`);
+        }
 
-        // ✅ Assign Transmittor
-        console.log(`🔹 Assigning transmittor: ${transmittorWallet.address}`);
-        tx = await ownerContract.assignTransmittorToUser(userAddress, transmittorWallet.address);
-        await tx.wait();
-        console.log(`✅ Transmittor assigned: ${transmittorWallet.address}`);
+        // Assign Transmittor
+        try {
+            console.log(`🔹 Assigning transmittor: ${transmittorWallet.address}`);
+            let tx = await ownerContract.assignTransmittorToUser(userAddress, transmittorWallet.address);
+            await tx.wait();
+            console.log(`✅ Transmittor assigned`);
+        } catch (err) {
+            throw new Error(`Transmittor assignment failed: ${err.reason || err.message}`);
+        }
 
-        // ✅ Assign Generator
-        console.log(`🔹 Assigning generator: ${generatorWallet.address}`);
-        tx = await ownerContract.assignGeneratorToUser(userAddress, generatorWallet.address);
-        await tx.wait();
-        console.log(`✅ Generator assigned: ${generatorWallet.address}`);
+        // Assign Generator
+        try {
+            console.log(`🔹 Assigning generator: ${generatorWallet.address}`);
+            let tx = await ownerContract.assignGeneratorToUser(userAddress, generatorWallet.address);
+            await tx.wait();
+            console.log(`✅ Generator assigned`);
+        } catch (err) {
+            throw new Error(`Generator assignment failed: ${err.reason || err.message}`);
+        }
 
-        // ✅ Assign Tariffs (Assuming tariffs are already set)
-        console.log(`🔹 Assigning distributor tariff to user: ${userAddress}`);
-        tx = await distributorContract.assignTariffToUser(userAddress, 1);
-        await tx.wait();
-        console.log("✅ Distributor Tariff assigned successfully!");
+        // Assign Tariffs
+        try {
+            console.log(`🔹 Assigning distributor tariff`);
+            let tx = await distributorContract.assignDistributorTariffToUser(userAddress, 1);
+            await tx.wait();
+            console.log(`✅ Distributor tariff assigned`);
+        } catch (err) {
+            throw new Error(`Distributor tariff assignment failed: ${err.reason || err.message}`);
+        }
 
-        console.log(`🔹 Assigning transmittor tariff to user: ${userAddress}`);
-        tx = await transmittorContract.assignTransmittorTariffToUser(userAddress, 1);
-        await tx.wait();
-        console.log("✅ Transmittor Tariff assigned successfully!");
+        try {
+            console.log(`🔹 Assigning transmittor tariff`);
+            let tx = await transmittorContract.assignTransmittorTariffToUser(userAddress, 1);
+            await tx.wait();
+            console.log(`✅ Transmittor tariff assigned`);
+        } catch (err) {
+            throw new Error(`Transmittor tariff assignment failed: ${err.reason || err.message}`);
+        }
 
-        console.log(`🔹 Assigning generator tariff to user: ${userAddress}`);
-        tx = await generatorContract.assignGeneratorTariffToUser(userAddress, 1);
-        await tx.wait();
-        console.log("✅ Generator Tariff assigned successfully!");
+        try {
+            console.log(`🔹 Assigning generator tariff`);
+            let tx = await generatorContract.assignGeneratorTariffToUser(userAddress, 1);
+            await tx.wait();
+            console.log(`✅ Generator tariff assigned`);
+        } catch (err) {
+            throw new Error(`Generator tariff assignment failed: ${err.reason || err.message}`);
+        }
 
-        return { success: true, message: "User registered and tariffs assigned successfully!" };
+        return {
+            success: true,
+            message: "✅ User registered and tariffs assigned successfully!",
+            provider: providerWallet.address,
+            distributor: distributorWallet.address,
+            distributorTariffID: "1",
+            transmittor: transmittorWallet.address,
+            transmittorTariffID: "1",
+            generator: generatorWallet.address,
+            generatorTariffID: "1",
+          };
+          
+
     } catch (error) {
-        console.error("❌ Error during registration:", error.reason || error.message);
-        return { success: false, message: error.reason || error.message };
+        console.error("❌ Error during registration:", error.message || error);
+        return { success: false, message: error.message || "Unknown error" };
     }
 }
 

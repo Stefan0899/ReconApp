@@ -259,15 +259,20 @@ function Registration({ walletAddress }) {
 
   const handleRegister = async () => {
     if (!walletAddress) return;
-    resetOutputs(); // ✅ Clear previous outputs
+  
+    console.log("🔹 Register button clicked for:", walletAddress); // 👈
+  
+    resetOutputs();
     setRegistering(true);
     setStatus("Processing registration...");
-
+  
     const message = await registerUser(walletAddress);
+  
+    console.log("🔹 Register user result:", message); // 👈
+  
     setStatus(message);
-
     setRegistering(false);
-  };
+  };  
   
   const handleTransfer = async () => {
     if (!walletAddress) {

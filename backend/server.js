@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());
 
 // If you want to allow multiple domains:
-const allowedOrigins = ["https://energyreconapp.onrender.com", "http://localhost:3000"];
+const allowedOrigins = ["https://energyreconapp.onrender.com", "http://localhost:3001", "http://localhost:3000"];
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
